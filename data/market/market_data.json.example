@@ -1,0 +1,15 @@
+{
+  "executive_summary": "Markets saw a broad-based de-risking move this week.",
+  "key_themes": ["Flight to Safety", "Tech Profit-Taking", "Value Rotation"],
+  "global_markets": [
+    {"name": "S&P/TSX Composite (CAD)", "wtd": "-0.02%", "mtd": "-0.22%", "qtd": "5.67%", "ytd": "8.81%"},
+    {"name": "FTSE 100 (UK)", "wtd": "-1.17%", "mtd": "-0.66%", "qtd": "0.06%", "ytd": "4.32%"}
+  ],
+  "global_market_insights": ["Canada outperforms: S&P/TSX was the global outlier."],
+  "style_factors": [
+    {"name": "Low Volatility", "wtd": "+1.74%", "mtd": "3.03%", "qtd": "0.56%", "ytd": "4.13%"}
+  ],
+  "sector_performance": [
+    {"name": "Energy", "wtd": "+2.45%", "mtd": "0.65%", "qtd": "-2.20%", "ytd": "27.16%"}
+  ]
+}

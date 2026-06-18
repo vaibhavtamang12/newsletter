@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Market Brief — {{ date }}</title>
+  <style>
+    /* ─── RESET & BASE ─── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #e8ecf0;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    /* ─── WRAPPER ─── */
+    .wrapper { width: 100%; padding: 28px 12px; background: #e8ecf0; }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 4px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.13);
+      overflow: hidden;
+    }
+
+    /* ─── HERO BANNER ─── */
+    .hero {
+      background: linear-gradient(160deg, #0a1628 0%, #0d2244 45%, #1a3a5c 80%, #1e4976 100%);
+      color: #fff;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 55%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Cpolyline points='0,180 60,140 120,160 180,90 240,110 300,50 360,70 400,30 400,200 0,200' fill='rgba(255,255,255,0.04)'/%3E%3Cpolyline points='0,180 60,155 120,170 180,115 240,130 300,75 360,90 400,55' fill='none' stroke='rgba(41,182,246,0.25)' stroke-width='1.5'/%3E%3Ccircle cx='300' cy='50' r='3' fill='rgba(41,182,246,0.5)'/%3E%3Ccircle cx='180' cy='90' r='3' fill='rgba(41,182,246,0.5)'/%3E%3C/svg%3E") no-repeat center bottom / cover;
+    }
+    .hero-inner { padding: 36px 40px 32px; position: relative; z-index: 1; }
+    .hero-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .hero-logo {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 18px; color: #29b6f6;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: -1px;
+    }
+    .hero-brand-name {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.3;
+    }
+    .hero-brand-tagline {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #29b6f6;
+      border: 1px solid rgba(41,182,246,0.4);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: 'Georgia', serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      margin-bottom: 14px;
+    }
+    .hero-meta {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    .hero-meta span { color: rgba(255,255,255,0.85); }
+
+    /* ─── SIGNAL STRIP ─── */
+    .signal-strip {
+      display: flex;
+      background: #0d1f3c;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .signal-item {
+      flex: 1;
+      padding: 12px 16px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+    }
+    .signal-item:last-child { border-right: none; }
+    .signal-label {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .signal-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .signal-value.pos { color: #4caf82; }
+    .signal-value.neg { color: #ef5350; }
+    .signal-value.neutral { color: #ffa726; }
+
+    /* ─── SECTION WRAPPER ─── */
+    .section { padding: 32px 40px; border-bottom: 1px solid #edf0f4; }
+    .section:last-of-type { border-bottom: none; }
+
+    /* ─── SECTION EYE-BROW ─── */
+    .eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #8a9ab5;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #edf0f4;
+    }
+    .section-title {
+      font-family: 'Georgia', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0d1f3c;
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    /* ─── EXECUTIVE SUMMARY ─── */
+    .exec-box {
+      background: #f5f8fd;
+      border-left: 4px solid #1a3a5c;
+      border-radius: 0 4px 4px 0;
+      padding: 18px 22px;
+      font-size: 14.5px;
+      color: #2d3a4f;
+      line-height: 1.75;
+    }
+    .exec-box p { margin-bottom: 12px; }
+    .exec-box p:last-child { margin-bottom: 0; }
+    .exec-box strong { color: #0d1f3c; }
+    .key-drivers {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed #c8d3e4;
+    }
+    .key-drivers .kd-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #8a9ab5;
+      margin-bottom: 8px;
+    }
+    .driver-pill {
+      display: inline-block;
+      background: #e8f0fe;
+      color: #1a3a5c;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Arial', sans-serif;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin: 3px 3px 0 0;
+    }
+
+    /* ─── BULLET LISTS ─── */
+    .brief-list { list-style: none; }
+    .brief-list li {
+      padding: 10px 0 10px 20px;
+      border-bottom: 1px solid #f0f3f8;
+      font-size: 14px;
+      color: #3d4f6a;
+      position: relative;
+    }
+    .brief-list li:last-child { border-bottom: none; }
+    .brief-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #1a3a5c;
+      font-size: 11px;
+      top: 12px;
+    }
+    .brief-list li strong { color: #0d1f3c; }
+
+    /* ─── PERFORMANCE TABLE ─── */
+    .perf-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .perf-table thead tr {
+      background: #0d1f3c;
+      color: #fff;
+    }
+    .perf-table thead th {
+      padding: 11px 14px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: left;
+    }
+    .perf-table thead th:not(:first-child) { text-align: right; }
+    .perf-table tbody tr:nth-child(even) { background: #f7f9fc; }
+    .perf-table tbody tr:hover { background: #edf3fb; }
+    .perf-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #edf0f4;
+      color: #3d4f6a;
+    }
+    .perf-table td:first-child { font-weight: 600; color: #1a2a40; }
+    .perf-table td:not(:first-child) {
+      text-align: right;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .pos { color: #2e7d52; }
+    .neg { color: #c62828; }
+    .flat { color: #7a8a9e; }
+
+    /* ─── INSIGHT CALLOUTS ─── */
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .insight-card {
+      background: #f5f8fd;
+      border-top: 3px solid #1a3a5c;
+      border-radius: 4px;
+      padding: 14px 16px;
+    }
+    .insight-card.green { border-top-color: #2e7d52; }
+    .insight-card.red { border-top-color: #c62828; }
+    .insight-card.amber { border-top-color: #e65100; }
+    .ic-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #8a9ab5;
+      margin-bottom: 6px;
+    }
+    .ic-value {
+      font-family: 'Georgia', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0d1f3c;
+      line-height: 1.3;
+    }
+    .ic-sub {
+      font-size: 12px;
+      color: #5a6e88;
+      margin-top: 4px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* ─── KEY INSIGHTS BULLETS ─── */
+    .insight-bullets { margin-top: 6px; }
+    .ib-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #edf0f4;
+      font-size: 14px;
+      color: #3d4f6a;
+    }
+    .ib-item:last-child { border-bottom: none; }
+    .ib-item .ib-title {
+      font-weight: 700;
+      color: #0d1f3c;
+      font-family: 'Georgia', serif;
+      font-size: 14px;
+      margin-bottom: 3px;
+      text-decoration: underline;
+      text-decoration-color: #c8d3e4;
+    }
+
+    /* ─── DISCLAIMER ─── */
+    .disclaimer {
+      padding: 22px 40px;
+      background: #f7f9fc;
+      border-top: 1px solid #edf0f4;
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: #9aa8be;
+      line-height: 1.6;
+    }
+    .disclaimer p { margin-bottom: 8px; }
+    .disclaimer p:last-child { margin-bottom: 0; }
+    .disclaimer strong { color: #7a8a9e; }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      background: #0d1f3c;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 18px 40px;
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.3px;
+    }
+    .footer a { color: #29b6f6; text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .hero-inner { padding: 24px 20px 20px; }
+      .section { padding: 24px 20px; }
+      .hero-title { font-size: 22px; }
+      .insight-grid { grid-template-columns: 1fr; }
+      .signal-strip { flex-wrap: wrap; }
+      .signal-item { flex: 0 0 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .disclaimer, .footer { padding: 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+<div class="container">
+
+  <!-- ═══════════════════════════════════════
+       HERO BANNER
+  ════════════════════════════════════════ -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-brand">
+        <div class="hero-logo">N</div>
+        <div>
+          <div class="hero-brand-name">Northern Invest</div>
+          <div class="hero-brand-tagline">Independent. Disciplined. Aligned.</div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);">Strategic Outlook</div>
+        </div>
+      </div>
+      <div class="hero-tag">Weekly Market Brief</div>
+      <div class="hero-title">
+        {% if hero_title %}{{ hero_title }}{% else %}{{ newsletter_title }}{% endif %}
+      </div>
+      <div class="hero-meta">Report Date: <span>{{ date }}</span></div>
+    </div>
+
+    <!-- Signal strip: quick top-level numbers -->
+    <div class="signal-strip">
+      <div class="signal-item">
+        <span class="signal-label">Market Posture</span>
+        {% set posture_lower = signal_posture | lower %}
+        {% if "risk-on" in posture_lower or "rally" in posture_lower %}
+          <span class="signal-value pos">{{ signal_posture }}</span>
+        {% elif "risk-off" in posture_lower or "de-risk" in posture_lower or "defensive" in posture_lower %}
+          <span class="signal-value neg">{{ signal_posture }}</span>
+        {% else %}
+          <span class="signal-value neutral">{{ signal_posture }}</span>
+        {% endif %}
+      </div>
+      <div class="signal-item">
+        <span class="signal-label">S&amp;P 500 WTD</span>
+        <span class="signal-value {{ sp500_wtd | perf_class }}">{{ sp500_wtd }}</span>
+      </div>
+      {% if leading_factor_name %}
+      <div class="signal-item">
+        <span class="signal-label">Leading Factor</span>
+        <span class="signal-value pos">{{ leading_factor_name }} {{ leading_factor_value }}</span>
+      </div>
+      {% endif %}
+      {% if top_sector_name %}
+      <div class="signal-item">
+        <span class="signal-label">Top Sector</span>
+        <span class="signal-value pos">{{ top_sector_name }} {{ top_sector_value }}</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       EXECUTIVE SUMMARY + MARKET SECTIONS (Jinja2)
+  ════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════════
+       EXECUTIVE SUMMARY
+  ════════════════════════════════════════ -->
+  {% if executive_summary or key_themes %}
+  <div class="section">
+    <div class="eyebrow">Executive Summary</div>
+    <div class="exec-box">
+      {% if executive_summary %}
+      <p>{{ executive_summary }}</p>
+      {% endif %}
+      {% if key_themes %}
+      <div class="key-drivers">
+        <div class="kd-label">Key Themes This Week</div>
+        {% for theme in key_themes %}
+        <span class="driver-pill">{{ theme }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════════════════════
+       GLOBAL MARKET PULSE
+  ════════════════════════════════════════ -->
+  {% if global_markets %}
+  <div class="section">
+    <div class="eyebrow">Global Market Pulse</div>
+    <div class="section-title">International Index Performance</div>
+
+    {% if global_market_insights %}
+    <ul class="brief-list" style="margin-bottom:22px;">
+      {% for insight in global_market_insights %}
+      <li>{{ insight }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>Global Markets</th>
+          <th>WTD</th>
+          <th>MTD</th>
+          <th>QTD</th>
+          <th>YTD</th>
+          <th>2025</th>
+          <th>2024</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in global_markets %}
+        <tr>
+          <td>{{ row.name }}</td>
+          <td class="{{ row.wtd | perf_class }}">{{ row.wtd }}</td>
+          <td class="{{ row.mtd | perf_class }}">{{ row.mtd }}</td>
+          <td class="{{ row.qtd | perf_class }}">{{ row.qtd }}</td>
+          <td class="{{ row.ytd | perf_class }}">{{ row.ytd }}</td>
+          <td class="{{ row.y2025 | perf_class }}">{{ row.y2025 }}</td>
+          <td class="{{ row.y2024 | perf_class }}">{{ row.y2024 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════════════════════
+       US EQUITY STYLE & FACTOR DYNAMICS
+  ════════════════════════════════════════ -->
+  {% if style_factors %}
+  <div class="section">
+    <div class="eyebrow">US Equity Style &amp; Factor Dynamics</div>
+    <div class="section-title">Style Factor Performance Update</div>
+
+    {% set sorted_factors = style_factors | sort(attribute='wtd', reverse=True) %}
+    {% if sorted_factors %}
+    <div class="insight-grid" style="margin-bottom:22px;">
+      <div class="insight-card green">
+        <div class="ic-label">Leading Factor</div>
+        <div class="ic-value">{{ sorted_factors[0].name }} {{ sorted_factors[0].wtd }}</div>
+        <div class="ic-sub">Best performing style this week</div>
+      </div>
+      <div class="insight-card red">
+        <div class="ic-label">Lagging Factor</div>
+        <div class="ic-value">{{ sorted_factors[-1].name }} {{ sorted_factors[-1].wtd }}</div>
+        <div class="ic-sub">Weakest performing style this week</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>Style Factors</th>
+          <th>WTD</th>
+          <th>MTD</th>
+          <th>QTD</th>
+          <th>YTD</th>
+          <th>2025</th>
+          <th>2024</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in style_factors %}
+        <tr>
+          <td>{{ row.name }}</td>
+          <td class="{{ row.wtd | perf_class }}">{{ row.wtd }}</td>
+          <td class="{{ row.mtd | perf_class }}">{{ row.mtd }}</td>
+          <td class="{{ row.qtd | perf_class }}">{{ row.qtd }}</td>
+          <td class="{{ row.ytd | perf_class }}">{{ row.ytd }}</td>
+          <td class="{{ row.y2025 | perf_class }}">{{ row.y2025 }}</td>
+          <td class="{{ row.y2024 | perf_class }}">{{ row.y2024 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════════════════════
+       S&P 500 SECTOR PERFORMANCE
+  ════════════════════════════════════════ -->
+  {% if sector_performance %}
+  <div class="section">
+    <div class="eyebrow">S&amp;P 500 Sector &amp; Industry Performance</div>
+    <div class="section-title">Sector / Market Cap Analysis</div>
+
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>S&amp;P 500 Sector</th>
+          <th>WTD</th>
+          <th>MTD</th>
+          <th>QTD</th>
+          <th>YTD</th>
+          <th>2025</th>
+          <th>2024</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in sector_performance %}
+        <tr>
+          <td>{{ row.name }}</td>
+          <td class="{{ row.wtd | perf_class }}">{{ row.wtd }}</td>
+          <td class="{{ row.mtd | perf_class }}">{{ row.mtd }}</td>
+          <td class="{{ row.qtd | perf_class }}">{{ row.qtd }}</td>
+          <td class="{{ row.ytd | perf_class }}">{{ row.ytd }}</td>
+          <td class="{{ row.y2025 | perf_class }}">{{ row.y2025 }}</td>
+          <td class="{{ row.y2024 | perf_class }}">{{ row.y2024 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════════════════════
+       DISCLAIMER
+  ════════════════════════════════════════ -->
+  <div class="disclaimer">
+    <p><strong>Disclaimer:</strong> This material is provided for <strong>informational and educational purposes only</strong> and does not constitute investment, financial, legal, accounting, or tax advice. The views and opinions expressed are those of the author as of the date of publication and are subject to change without notice based on market and other conditions.</p>
+    <p>This content should not be construed as a <strong>solicitation, offer, or recommendation</strong> to buy or sell any securities or to adopt any particular investment strategy. The information contained herein has been obtained from sources believed to be reliable; however, its accuracy or completeness is not guaranteed.</p>
+    <p>Investing involves risk, including the possible loss of principal. Past performance is not indicative of future results, and no assurance can be given that any investment objectives will be achieved.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <div class="footer">
+    <p>Northern Invest &nbsp;·&nbsp; Weekly Market Brief &nbsp;·&nbsp; {{ date }}</p>
+    <p style="margin-top:6px;">
+      <a href="#">Unsubscribe</a> &nbsp;|&nbsp; <a href="#">View Archive</a> &nbsp;|&nbsp; <a href="#">Manage Preferences</a>
+    </p>
+    <p style="margin-top:8px; font-size:10px; opacity:0.5;">Independent. Disciplined. Aligned. &nbsp;·&nbsp; Rooted in Canada. Investing for Generations.</p>
+    <p style="margin-top:6px; font-size:10px; opacity:0.4;">Generated {{ generated_at_ist }} ({{ generated_at }})</p>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /wrapper -->
+</body>
+</html>

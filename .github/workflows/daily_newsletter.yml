@@ -1,0 +1,80 @@
+name: Daily Finance Newsletter
+
+on:
+  # Runs at 06:30 UTC = 12:00 PM IST (Indian Standard Time, UTC+5:30)
+  schedule:
+    - cron: '30 6 * * *'
+  # Also allows manual trigger from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-send:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: pip install --upgrade -r requirements.txt
+
+      - name: Create Environment Configuration
+        run: |
+          cat << ENVEOF > .env
+          GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL=llama-3.3-70b-versatile
+          GMAIL_USER=${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD=${{ secrets.GMAIL_APP_PASSWORD }}
+          SMTP_HOST=smtp.gmail.com
+          SMTP_PORT=587
+          NEWSLETTER_SENDER_NAME=${{ secrets.SENDER_NAME }}
+          NEWSLETTER_SENDER_EMAIL=${{ secrets.SENDER_EMAIL }}
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+          NEWSLETTER_MAX_ARTICLES=8
+          LOG_LEVEL=INFO
+          ENVEOF
+
+      - name: Initialize Runtime Directories
+        run: |
+          mkdir -p data/raw data/processed data/summaries
+          mkdir -p logs/delivery_reports newsletters
+
+      - name: Fetch RSS News
+        run: python scripts/fetch_news.py
+
+      - name: Fetch Live Market Data
+        run: python scripts/fetch_market_data.py
+
+      - name: Clean and Deduplicate News
+        run: python scripts/clean_news.py
+
+      - name: AI Summarization (Groq)
+        run: python scripts/summarize_news.py
+
+      - name: Generate Newsletter
+        run: python scripts/generate_newsletter.py
+
+      - name: Send Email
+        run: python scripts/send_email.py
+
+      - name: Commit Archives
+        if: success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Bot"
+          git add newsletters/ logs/delivery_reports/
+          git diff --cached --quiet && echo "No changes to commit" || (
+            git commit -m "Newsletter: $(date +'%Y-%m-%d')" &&
+            git push
+          )
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

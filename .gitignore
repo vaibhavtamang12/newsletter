@@ -1,0 +1,31 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Runtime data (keep directories tracked, ignore contents)
+data/raw/*
+data/processed/*
+data/summaries/*
+!data/.gitkeep
+data/market/market_data.json
+!data/market/market_data.json.example
+
+# Logs
+logs/*.log
+
+# OS/Editor files
+.DS_Store
+.vscode/
+*.swp
+*.swo.env.example

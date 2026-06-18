@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Market Brief — [REPORT DATE]</title>
+  <style>
+    /* ─── RESET & BASE ─── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #e8ecf0;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #1a1a2e;
+      line-height: 1.7;
+    }
+
+    /* ─── WRAPPER ─── */
+    .wrapper { width: 100%; padding: 28px 12px; background: #e8ecf0; }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 4px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.13);
+      overflow: hidden;
+    }
+
+    /* ─── HERO BANNER ─── */
+    .hero {
+      background: linear-gradient(160deg, #0a1628 0%, #0d2244 45%, #1a3a5c 80%, #1e4976 100%);
+      color: #fff;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 55%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Cpolyline points='0,180 60,140 120,160 180,90 240,110 300,50 360,70 400,30 400,200 0,200' fill='rgba(255,255,255,0.04)'/%3E%3Cpolyline points='0,180 60,155 120,170 180,115 240,130 300,75 360,90 400,55' fill='none' stroke='rgba(41,182,246,0.25)' stroke-width='1.5'/%3E%3Ccircle cx='300' cy='50' r='3' fill='rgba(41,182,246,0.5)'/%3E%3Ccircle cx='180' cy='90' r='3' fill='rgba(41,182,246,0.5)'/%3E%3C/svg%3E") no-repeat center bottom / cover;
+    }
+    .hero-inner { padding: 36px 40px 32px; position: relative; z-index: 1; }
+    .hero-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .hero-logo {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 18px; color: #29b6f6;
+      font-family: 'Arial', sans-serif;
+      letter-spacing: -1px;
+    }
+    .hero-brand-name {
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.3;
+    }
+    .hero-brand-tagline {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #29b6f6;
+      border: 1px solid rgba(41,182,246,0.4);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-family: 'Georgia', serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      margin-bottom: 14px;
+    }
+    .hero-meta {
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    .hero-meta span { color: rgba(255,255,255,0.85); }
+
+    /* ─── SIGNAL STRIP ─── */
+    .signal-strip {
+      display: flex;
+      background: #0d1f3c;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .signal-item {
+      flex: 1;
+      padding: 12px 16px;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+      font-family: 'Arial', sans-serif;
+    }
+    .signal-item:last-child { border-right: none; }
+    .signal-label {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .signal-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .signal-value.pos { color: #4caf82; }
+    .signal-value.neg { color: #ef5350; }
+    .signal-value.neutral { color: #ffa726; }
+
+    /* ─── SECTION WRAPPER ─── */
+    .section { padding: 32px 40px; border-bottom: 1px solid #edf0f4; }
+    .section:last-of-type { border-bottom: none; }
+
+    /* ─── SECTION EYE-BROW ─── */
+    .eyebrow {
+      font-family: 'Arial', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #8a9ab5;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #edf0f4;
+    }
+    .section-title {
+      font-family: 'Georgia', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0d1f3c;
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    /* ─── EXECUTIVE SUMMARY ─── */
+    .exec-box {
+      background: #f5f8fd;
+      border-left: 4px solid #1a3a5c;
+      border-radius: 0 4px 4px 0;
+      padding: 18px 22px;
+      font-size: 14.5px;
+      color: #2d3a4f;
+      line-height: 1.75;
+    }
+    .exec-box p { margin-bottom: 12px; }
+    .exec-box p:last-child { margin-bottom: 0; }
+    .exec-box strong { color: #0d1f3c; }
+    .key-drivers {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed #c8d3e4;
+    }
+    .key-drivers .kd-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #8a9ab5;
+      margin-bottom: 8px;
+    }
+    .driver-pill {
+      display: inline-block;
+      background: #e8f0fe;
+      color: #1a3a5c;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Arial', sans-serif;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin: 3px 3px 0 0;
+    }
+
+    /* ─── BULLET LISTS ─── */
+    .brief-list { list-style: none; }
+    .brief-list li {
+      padding: 10px 0 10px 20px;
+      border-bottom: 1px solid #f0f3f8;
+      font-size: 14px;
+      color: #3d4f6a;
+      position: relative;
+    }
+    .brief-list li:last-child { border-bottom: none; }
+    .brief-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #1a3a5c;
+      font-size: 11px;
+      top: 12px;
+    }
+    .brief-list li strong { color: #0d1f3c; }
+
+    /* ─── PERFORMANCE TABLE ─── */
+    .perf-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Arial', sans-serif;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .perf-table thead tr {
+      background: #0d1f3c;
+      color: #fff;
+    }
+    .perf-table thead th {
+      padding: 11px 14px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: left;
+    }
+    .perf-table thead th:not(:first-child) { text-align: right; }
+    .perf-table tbody tr:nth-child(even) { background: #f7f9fc; }
+    .perf-table tbody tr:hover { background: #edf3fb; }
+    .perf-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #edf0f4;
+      color: #3d4f6a;
+    }
+    .perf-table td:first-child { font-weight: 600; color: #1a2a40; }
+    .perf-table td:not(:first-child) {
+      text-align: right;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .pos { color: #2e7d52; }
+    .neg { color: #c62828; }
+    .flat { color: #7a8a9e; }
+
+    /* ─── INSIGHT CALLOUTS ─── */
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .insight-card {
+      background: #f5f8fd;
+      border-top: 3px solid #1a3a5c;
+      border-radius: 4px;
+      padding: 14px 16px;
+    }
+    .insight-card.green { border-top-color: #2e7d52; }
+    .insight-card.red { border-top-color: #c62828; }
+    .insight-card.amber { border-top-color: #e65100; }
+    .ic-label {
+      font-family: 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #8a9ab5;
+      margin-bottom: 6px;
+    }
+    .ic-value {
+      font-family: 'Georgia', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0d1f3c;
+      line-height: 1.3;
+    }
+    .ic-sub {
+      font-size: 12px;
+      color: #5a6e88;
+      margin-top: 4px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    /* ─── KEY INSIGHTS BULLETS ─── */
+    .insight-bullets { margin-top: 6px; }
+    .ib-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #edf0f4;
+      font-size: 14px;
+      color: #3d4f6a;
+    }
+    .ib-item:last-child { border-bottom: none; }
+    .ib-item .ib-title {
+      font-weight: 700;
+      color: #0d1f3c;
+      font-family: 'Georgia', serif;
+      font-size: 14px;
+      margin-bottom: 3px;
+      text-decoration: underline;
+      text-decoration-color: #c8d3e4;
+    }
+
+    /* ─── DISCLAIMER ─── */
+    .disclaimer {
+      padding: 22px 40px;
+      background: #f7f9fc;
+      border-top: 1px solid #edf0f4;
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      color: #9aa8be;
+      line-height: 1.6;
+    }
+    .disclaimer p { margin-bottom: 8px; }
+    .disclaimer p:last-child { margin-bottom: 0; }
+    .disclaimer strong { color: #7a8a9e; }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      background: #0d1f3c;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 18px 40px;
+      font-family: 'Arial', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.3px;
+    }
+    .footer a { color: #29b6f6; text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .hero-inner { padding: 24px 20px 20px; }
+      .section { padding: 24px 20px; }
+      .hero-title { font-size: 22px; }
+      .insight-grid { grid-template-columns: 1fr; }
+      .signal-strip { flex-wrap: wrap; }
+      .signal-item { flex: 0 0 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .disclaimer, .footer { padding: 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+<div class="container">
+
+  <!-- ═══════════════════════════════════════
+       HERO BANNER
+  ════════════════════════════════════════ -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-brand">
+        <div class="hero-logo">N</div>
+        <div>
+          <div class="hero-brand-name">Northern Invest</div>
+          <div class="hero-brand-tagline">Independent. Disciplined. Aligned.</div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);">Strategic Outlook</div>
+        </div>
+      </div>
+      <div class="hero-tag">Weekly Market Brief</div>
+      <div class="hero-title">
+        <!-- EDIT: Newsletter title / theme for the week -->
+        De-risking Event, Global Market Pulse,<br>US Equity Style &amp; Factor Dynamics
+      </div>
+      <div class="hero-meta">Report Date: <span>[REPORT DATE — e.g. June 5, 2026]</span></div>
+    </div>
+
+    <!-- Signal strip: quick top-level numbers -->
+    <div class="signal-strip">
+      <div class="signal-item">
+        <span class="signal-label">Market Posture</span>
+        <span class="signal-value neutral">De-Risking</span>
+      </div>
+      <div class="signal-item">
+        <span class="signal-label">S&P 500 WTD</span>
+        <!-- EDIT: weekly change -->
+        <span class="signal-value neg">−2.45%</span>
+      </div>
+      <div class="signal-item">
+        <span class="signal-label">Leading Factor</span>
+        <span class="signal-value pos">Low Vol +1.74%</span>
+      </div>
+      <div class="signal-item">
+        <span class="signal-label">Top Sector</span>
+        <span class="signal-value pos">Energy +2.45%</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       EXECUTIVE SUMMARY
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="eyebrow">Executive Summary</div>
+    <div class="exec-box">
+      <p>
+        <!-- EDIT: primary narrative paragraph -->
+        This week was characterized by a sharp <strong>de-risking event</strong> across global equities, primarily driven by significant profit-taking in high-growth areas and a decisive rotation into defensive, value-oriented assets. While major indices faced pressure, specific 'real-asset' pockets and low-volatility strategies provided positive returns.
+      </p>
+      <p>
+        <!-- EDIT: secondary context paragraph -->
+        Key drivers for the volatility included strategic "Liquidation and profit-taking" as investors prepared for major upcoming IPOs (e.g., SpaceX), alongside a solid US jobs report that bolstered the domestic economic outlook but also signaled that interest rates may remain "higher for longer".
+      </p>
+      <div class="key-drivers">
+        <div class="kd-label">Key Themes This Week</div>
+        <!-- EDIT: add/remove theme pills -->
+        <span class="driver-pill">Flight to Quality</span>
+        <span class="driver-pill">Defensive Rotation</span>
+        <span class="driver-pill">EM Weakness</span>
+        <span class="driver-pill">Tech Correction</span>
+        <span class="driver-pill">Value vs. Growth</span>
+        <span class="driver-pill">Rate Sensitivity</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       GLOBAL MARKET PULSE
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="eyebrow">Global Market Pulse</div>
+    <div class="section-title">International Index Performance</div>
+
+    <!-- EDIT: summary bullets above table -->
+    <ul class="brief-list" style="margin-bottom:22px;">
+      <li>The <strong>S&amp;P/TSX (Canada)</strong> was the global outlier (−0.02%), benefiting from its commodity exposure.</li>
+      <li><strong>Regional Weakness &amp; Currency Pressure:</strong> Emerging Markets were the hardest hit, with the <strong>MSCI EM (−5.85%)</strong> and <strong>Hang Seng (−5.58%)</strong> experiencing severe drawdowns.</li>
+      <li><strong>Eurozone Divergence:</strong> The <strong>DAX 40 (−3.04%)</strong> significantly lagged the broader world indices, indicating localized economic pressure in Germany.</li>
+    </ul>
+
+    <!-- EDIT: replace row data with current figures -->
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>Global Markets</th>
+          <th>WTD</th>
+          <th>MTD</th>
+          <th>QTD</th>
+          <th>YTD</th>
+          <th>2025</th>
+          <th>2024</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>S&amp;P/TSX Composite (CAD)</td><td class="flat">−0.02%</td><td class="neg">−0.22%</td><td class="pos">5.67%</td><td class="pos">8.81%</td><td class="pos">28.11%</td><td class="pos">21.07%</td></tr>
+        <tr><td>FTSE 100 (UK)</td><td class="neg">−1.17%</td><td class="neg">−0.66%</td><td class="flat">0.06%</td><td class="pos">4.32%</td><td class="pos">35.27%</td><td class="pos">7.75%</td></tr>
+        <tr><td>CAC 40 (France)</td><td class="neg">−1.33%</td><td class="neg">−1.00%</td><td class="pos">3.44%</td><td class="flat">0.11%</td><td class="pos">30.13%</td><td class="neg">−4.23%</td></tr>
+        <tr><td>STOXX Europe 600 (EUR)</td><td class="neg">−2.11%</td><td class="neg">−1.57%</td><td class="pos">4.20%</td><td class="pos">3.52%</td><td class="pos">36.44%</td><td class="pos">3.17%</td></tr>
+        <tr><td>DAX 40 (Germany)</td><td class="neg">−3.04%</td><td class="neg">−1.85%</td><td class="pos">5.12%</td><td class="neg">−1.06%</td><td class="pos">29.33%</td><td class="pos">18.85%</td></tr>
+        <tr><td>MSCI World (Developed)</td><td class="neg">−2.22%</td><td class="neg">−1.44%</td><td class="pos">5.18%</td><td class="pos">5.82%</td><td class="pos">27.76%</td><td class="pos">18.67%</td></tr>
+        <tr><td>MSCI ACWI</td><td class="neg">−2.62%</td><td class="neg">−1.85%</td><td class="pos">4.64%</td><td class="pos">5.50%</td><td class="pos">25.84%</td><td class="pos">16.80%</td></tr>
+        <tr><td>Hang Seng (HK)</td><td class="neg">−5.58%</td><td class="neg">−6.31%</td><td class="pos">10.18%</td><td class="pos">17.89%</td><td class="pos">47.99%</td><td class="pos">17.70%</td></tr>
+        <tr><td>MSCI EM (Emerging)</td><td class="neg">−5.85%</td><td class="neg">−7.83%</td><td class="pos">12.86%</td><td class="pos">14.85%</td><td class="pos">34.17%</td><td class="pos">7.75%</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Key Insights -->
+    <div class="insight-bullets" style="margin-top:20px;">
+      <div class="eyebrow" style="margin-top:6px;">Key Insights &amp; Takeaways</div>
+      <div class="ib-item">
+        <div class="ib-title">Emerging Markets (EM) Volatility</div>
+        MSCI EM saw the sharpest weekly decline of −5.85%, closely followed by the Hang Seng (−5.58%). Despite this weekly rout, the EM sector remains a top YTD performer (+14.85%), suggesting a sharp, perhaps necessary, mean-reversion after a very strong 2025 (+34.17%).
+      </div>
+      <div class="ib-item">
+        <div class="ib-title">Relative Strength in Canada</div>
+        The S&amp;P/TSX Composite (CAD) was the clear outlier, remaining virtually flat (−0.02%) while all other major indices pulled back significantly. This likely reflects the index's heavy weighting in Energy and Materials, which provided a buffer against the broader market sell-off.
+      </div>
+      <div class="ib-item">
+        <div class="ib-title">European Weakness (Led by DAX)</div>
+        The DAX 40 (Germany) dropped −3.04% last week, pushing its YTD performance into negative territory (−1.06%). This highlights ongoing industrial or macroeconomic headwinds in the Eurozone.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       US EQUITY STYLE & FACTOR DYNAMICS
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="eyebrow">US Equity Style &amp; Factor Dynamics</div>
+    <div class="section-title">Style Factor Performance Update</div>
+
+    <!-- Quick summary cards -->
+    <div class="insight-grid" style="margin-bottom:22px;">
+      <div class="insight-card green">
+        <div class="ic-label">Leading Factor</div>
+        <div class="ic-value">Low Volatility +1.74%</div>
+        <div class="ic-sub">Classic flight-to-safety signal</div>
+      </div>
+      <div class="insight-card red">
+        <div class="ic-label">Lagging Factor</div>
+        <div class="ic-value">High Beta −4.54%</div>
+        <div class="ic-sub">Aggressive deleveraging in speculative names</div>
+      </div>
+    </div>
+
+    <!-- EDIT: replace row data with current figures -->
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>Style Factors</th>
+          <th>WTD</th>
+          <th>MTD</th>
+          <th>QTD</th>
+          <th>YTD</th>
+          <th>2025</th>
+          <th>2024</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Low Volatility</td><td class="pos">1.74%</td><td class="pos">3.03%</td><td class="flat">0.56%</td><td class="pos">4.13%</td><td class="pos">4.54%</td><td class="pos">12.94%</td></tr>
+        <tr><td>Low Vol High Div</td><td class="pos">1.13%</td><td class="pos">2.14%</td><td class="pos">2.44%</td><td class="pos">6.29%</td><td class="pos">3.30%</td><td class="pos">16.18%</td></tr>
+        <tr><td>Pure Value</td><td class="pos">0.60%</td><td class="flat">0.13%</td><td class="pos">6.41%</td><td class="pos">9.80%</td><td class="pos">18.13%</td><td class="pos">11.27%</td></tr>
+        <tr><td>Equal Weight</td><td class="neg">−0.48%</td><td class="neg">−0.66%</td><td class="pos">7.94%</td><td class="pos">8.22%</td><td class="pos">11.54%</td><td class="pos">12.76%</td></tr>
+        <tr><td>Value</td><td class="neg">−0.65%</td><td class="neg">−0.44%</td><td class="pos">9.99%</td><td class="pos">11.84%</td><td class="pos">15.91%</td><td class="pos">13.77%</td></tr>
+        <tr><td>Quality</td><td class="neg">−1.09%</td><td class="neg">−1.31%</td><td class="pos">10.57%</td><td class="pos">7.23%</td><td class="pos">12.95%</td><td class="pos">23.18%</td></tr>
+        <tr><td>Momentum</td><td class="neg">−2.96%</td><td class="neg">−3.30%</td><td class="pos">24.97%</td><td class="pos">21.37%</td><td class="pos">21.53%</td><td class="pos">35.36%</td></tr>
+        <tr><td>Growth</td><td class="neg">−3.91%</td><td class="neg">−3.60%</td><td class="pos">18.05%</td><td class="pos">12.67%</td><td class="pos">16.36%</td><td class="pos">30.10%</td></tr>
+        <tr><td>High Beta</td><td class="neg">−4.54%</td><td class="neg">−5.82%</td><td class="pos">18.60%</td><td class="pos">10.48%</td><td class="pos">10.28%</td><td class="pos">21.24%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight-bullets" style="margin-top:20px;">
+      <div class="eyebrow" style="margin-top:6px;">Key Insights &amp; Takeaways</div>
+      <div class="ib-item">
+        <div class="ib-title">Risk-Off Sentiment Dominates</div>
+        Low Volatility (+1.74%) and Low Vol High Div (+1.13%) were the only positive performers last week. This is a classic "flight to safety" signal, as investors rotated away from aggressive growth into strategies designed to weather market turbulence.
+      </div>
+      <div class="ib-item">
+        <div class="ib-title">Growth &amp; High Beta Collapse</div>
+        The most aggressive strategies were the hardest hit. High Beta (−4.54%), Growth (−4.04%), and Pure Growth (−3.91%) led the declines. This suggests a significant deleveraging event in speculative and tech-heavy factors.
+      </div>
+      <div class="ib-item">
+        <div class="ib-title">Value Resilience</div>
+        Pure Value (+0.60%) significantly outperformed Value (−0.65%) and Growth. This indicates that the deeper the value discount, the better the protection was during last week's tech-led sell-off.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       S&P 500 SECTOR PERFORMANCE
+  ════════════════════════════════════════ -->
+  <div class="section">
+    <div class="eyebrow">SP 500 Sector &amp; Industry Performance</div>
+    <div class="section-title">Sector / Market Cap Analysis</div>
+
+    <!-- EDIT: replace row data with current figures -->
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>SP 500 Sector</th>
+          <th>WTD</th>
+          <th>MTD</th>
+          <th>QTD</th>
+          <th>YTD (2026)</th>
+          <th>2025</th>
+          <th>2024</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Energy</td><td class="pos">2.45%</td><td class="flat">0.65%</td><td class="neg">−2.20%</td><td class="pos">27.16%</td><td class="pos">6.63%</td><td class="pos">4.44%</td></tr>
+        <tr><td>Healthcare</td><td class="pos">2.37%</td><td class="pos">3.50%</td><td class="pos">3.57%</td><td class="neg">−1.20%</td><td class="pos">14.47%</td><td class="flat">0.70%</td></tr>
+        <tr><td>Real Estate</td><td class="pos">1.61%</td><td class="pos">3.30%</td><td class="pos">9.16%</td><td class="pos">11.44%</td><td class="pos">3.60%</td><td class="pos">4.13%</td></tr>
+        <tr><td>Financial</td><td class="pos">1.40%</td><td class="pos">1.69%</td><td class="pos">5.78%</td><td class="neg">−4.30%</td><td class="pos">15.19%</td><td class="pos">30.00%</td></tr>
+        <tr><td>Consumer Staples</td><td class="pos">0.64%</td><td class="pos">1.72%</td><td class="pos">2.43%</td><td class="pos">8.01%</td><td class="pos">1.83%</td><td class="pos">10.95%</td></tr>
+        <tr><td>Industrials</td><td class="pos">0.61%</td><td class="pos">1.03%</td><td class="pos">5.93%</td><td class="pos">10.56%</td><td class="pos">19.77%</td><td class="pos">18.51%</td></tr>
+        <tr><td>Material</td><td class="neg">−1.02%</td><td class="neg">−0.57%</td><td class="flat">0.34%</td><td class="pos">10.27%</td><td class="pos">11.17%</td><td class="flat">0.33%</td></tr>
+        <tr><td>Communication Services</td><td class="neg">−3.47%</td><td class="neg">−3.41%</td><td class="flat">0.39%</td><td class="neg">−4.17%</td><td class="pos">22.48%</td><td class="pos">35.47%</td></tr>
+        <tr><td>Consumer Discretionary</td><td class="neg">−4.97%</td><td class="neg">−2.82%</td><td class="pos">4.61%</td><td class="neg">−2.75%</td><td class="pos">8.80%</td><td class="pos">27.70%</td></tr>
+        <tr><td>Info Tech</td><td class="neg">−5.61%</td><td class="neg">−7.90%</td><td class="pos">33.64%</td><td class="pos">25.10%</td><td class="pos">24.90%</td><td class="pos">24.90%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="insight-bullets" style="margin-top:20px;">
+      <div class="eyebrow" style="margin-top:6px;">Key Insights &amp; Takeaways</div>
+      <div class="ib-item">
+        <div class="ib-title">Defensive Rotation in Full Swing</div>
+        The market saw a clear shift toward defensive and 'real-asset' sectors. Energy (XLE, +2.45%) and Healthcare (XLV, +2.37%) led the pack, indicating that investors are prioritizing yield and stable cash flows over growth during this volatile period.
+      </div>
+      <div class="ib-item">
+        <div class="ib-title">Tech Correction is Healthy but Aggressive</div>
+        Info Tech (XLK) was the worst performer last week, dropping −5.61%. While this looks alarming, it follows a massive 33.64% QTD gain. This suggests profit-taking in high-valuation names rather than a fundamental breakdown of the sector.
+      </div>
+      <div class="ib-item">
+        <div class="ib-title">Real Estate Resilience</div>
+        Real Estate (XLRE, +1.61%) continues its strong quarter (+9.16% QTD). This suggests that interest rate expectations may be stabilizing, or investors are seeking inflation-protected assets.
+      </div>
+      <div class="ib-item">
+        <div class="ib-title">Growth vs. Value Divergence</div>
+        The sharp underperformance of Consumer Discretionary (XLY, −4.30%) and Communication Services (XLC, −3.47%) alongside Tech confirms that 'Growth' as a factor is currently out of favor compared to 'Value' or 'Defensive' sectors.
+      </div>
+    </div>
+
+    <p style="margin-top:18px; font-size:14px; color:#3d4f6a; line-height:1.75;">
+      <!-- EDIT: closing narrative paragraph -->
+      The market is currently in a corrective phase for Growth and Tech. As we head into next week, the focus remains on whether the rotation into Value and Defensives (Energy/Healthcare/Low Vol) can continue to provide a floor for the broader market while Tech finds a new support level. The solid jobs data suggests underlying economic strength, providing a fundamental backstop for US markets despite temporary technical liquidations.
+    </p>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       DISCLAIMER
+  ════════════════════════════════════════ -->
+  <div class="disclaimer">
+    <p><strong>Disclaimer:</strong> This material is provided for <strong>informational and educational purposes only</strong> and does not constitute investment, financial, legal, accounting, or tax advice. The views and opinions expressed are those of the author as of the date of publication and are subject to change without notice based on market and other conditions.</p>
+    <p>This content should not be construed as a <strong>solicitation, offer, or recommendation</strong> to buy or sell any securities or to adopt any particular investment strategy. The information contained herein has been obtained from sources believed to be reliable; however, its accuracy or completeness is not guaranteed.</p>
+    <p>Investing involves risk, including the possible loss of principal. Past performance is not indicative of future results, and no assurance can be given that any investment objectives will be achieved.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <div class="footer">
+    <p>Northern Invest &nbsp;·&nbsp; Weekly Market Brief &nbsp;·&nbsp; [REPORT DATE]</p>
+    <p style="margin-top:6px;">
+      <a href="#">Unsubscribe</a> &nbsp;|&nbsp; <a href="#">View Archive</a> &nbsp;|&nbsp; <a href="#">Manage Preferences</a>
+    </p>
+    <p style="margin-top:8px; font-size:10px; opacity:0.5;">Independent. Disciplined. Aligned. &nbsp;·&nbsp; Rooted in Canada. Investing for Generations.</p>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /wrapper -->
+</body>
+</html>

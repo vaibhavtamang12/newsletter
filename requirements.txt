@@ -1,0 +1,17 @@
+# RSS Parsing
+feedparser>=6.0.11
+
+# HTTP Requests
+requests>=2.31.0
+
+# Environment Variables
+python-dotenv>=1.0.1
+
+# Groq AI SDK (free tier, high RPM)
+groq>=0.9.0
+
+# Template Engine
+Jinja2>=3.1.4
+
+# Live market data (no API key required)
+yfinance>=0.2.40

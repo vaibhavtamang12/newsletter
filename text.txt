@@ -1,0 +1,122 @@
+name: 📊 Daily Finance Newsletter Pipeline
+
+# ==========================================
+# TRIGGERS
+# ==========================================
+on:
+  # Schedule: Run every morning at 07:00 UTC
+  # Change to your preferred time (Format: minute hour day month day-of-week)
+  schedule:
+    - cron: '0 7 * * *'
+  
+  # Manual trigger for testing or on-demand execution
+  workflow_dispatch:
+    inputs:
+      verbose_log:
+        description: 'Enable verbose logging'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+# ==========================================
+# JOB DEFINITION
+# ==========================================
+jobs:
+  build-and-deploy:
+    name: 🚀 Fetch, Summarize & Send
+    runs-on: ubuntu-latest
+    
+    # Permissions to commit generated files back to the repository
+    permissions:
+      contents: write
+
+    # ==========================================
+    # STEP SEQUENCE
+    # ==========================================
+    steps:
+      # 1. Checkout Code
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for accurate commit messages if needed
+
+      # 2. Setup Python Environment
+      - name: 🐍 Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip' # Enables pip caching automatically
+
+      # 3. Install Dependencies (Uses cached layer if available)
+      - name: 📦 Install Dependencies
+        run: pip install --upgrade -r requirements.txt
+
+      # 4. Create Secure .env File from GitHub Secrets
+      # WHY? Our scripts use python-dotenv to load credentials.
+      # GitHub Actions injects secrets as env vars, so we create the file dynamically.
+      - name: 🔐 Create Environment Configuration
+        run: |
+          cat << EOF > .env
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL=gemini-1.5-flash
+          GMAIL_USER=${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD=${{ secrets.GMAIL_APP_PASSWORD }}
+          SMTP_HOST=smtp.gmail.com
+          SMTP_PORT=587
+          NEWSLETTER_SENDER_NAME=${{ secrets.SENDER_NAME }}
+          NEWSLETTER_SENDER_EMAIL=${{ secrets.SENDER_EMAIL || secrets.GMAIL_USER }}
+          NEWSLETTER_SUBJECT=[Daily] Finance Market Digest - {date}
+          LOG_LEVEL=INFO
+          EOF
+          
+          # Verify file exists but do NOT print secrets
+          echo ".env file created successfully."
+          ls -la .env
+
+      # 5. Create necessary runtime directories
+      - name: 📂 Initialize Runtime Directories
+        run: |
+          mkdir -p data/raw data/processed data/summaries
+          mkdir -p logs/delivery_reports
+          mkdir -p newsletters
+
+      # 6. Run Pipeline Steps Sequentially
+      # Each step must succeed before the next begins.
+      
+      - name: 📡 Step 1: Fetch RSS News
+        run: python scripts/fetch_news.py
+
+      - name: 🧹 Step 2: Clean & Deduplicate News
+        run: python scripts/clean_news.py
+
+      - name: 🤖 Step 3: AI Summarization (Gemini)
+        run: python scripts/summarize_news.py
+
+      - name: 📝 Step 4: Generate Newsletter (Jinja2)
+        run: python scripts/generate_newsletter.py
+
+      - name: 📧 Step 5: Deliver via Gmail SMTP
+        run: python scripts/send_email.py
+
+      # 7. Archive & Commit Generated Newsletters
+      # We only commit the newsletters/ folder to keep repo size manageable.
+      - name: 📤 Commit & Push Archives
+        if: success() # Only run if all previous steps succeeded
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Bot"
+          
+          git add newsletters/
+          git add logs/delivery_reports/
+          
+          # Check if there are changes to commit
+          git diff --cached --quiet && echo "No changes to commit" || (
+            git commit -m "📦 Auto-generated newsletter: $(date +'%Y-%m-%d')" &&
+            git push
+          )
+        env:
+          # Using GITHUB_TOKEN is safe for writing to the same repo
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

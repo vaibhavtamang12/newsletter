@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Finance Digest</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f0f2f5; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #2d3748; line-height: 1.6; }
+        .wrapper { width: 100%; padding: 24px 0; background-color: #f0f2f5; }
+        .container { max-width: 700px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.10); overflow: hidden; }
+
+        /* ── HEADER ── */
+        .header { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 60%, #2c5364 100%); color: #ffffff; padding: 36px 32px 28px; text-align: center; }
+        .header h1 { margin: 0 0 6px; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
+        .header .subtitle { margin: 0; font-size: 13px; opacity: 0.85; letter-spacing: 0.3px; }
+        .header .dateline { display: inline-block; margin-top: 14px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 5px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+
+        /* ── SECTION LABELS ── */
+        .section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #718096; margin: 28px 0 10px; }
+
+        /* ── EXECUTIVE SUMMARY ── */
+        .exec-summary { padding: 28px 32px 0; }
+        .exec-summary-box { background: #f7faff; border: 1px solid #d6e4f7; border-left: 5px solid #2c5364; border-radius: 8px; padding: 18px 20px; }
+        .exec-summary-box p { margin: 0 0 10px; font-size: 14.5px; color: #2d3748; }
+        .exec-summary-box p:last-child { margin-bottom: 0; }
+
+        /* ── MARKET PULSE BULLETS ── */
+        .pulse-list { margin: 0; padding: 0; list-style: none; }
+        .pulse-list li { font-size: 13.5px; color: #4a5568; padding: 5px 0 5px 18px; position: relative; border-bottom: 1px solid #edf2f7; }
+        .pulse-list li:last-child { border-bottom: none; }
+        .pulse-list li::before { content: "▸"; position: absolute; left: 0; color: #2c5364; font-size: 11px; top: 7px; }
+        .up { color: #276749; font-weight: 600; }
+        .down { color: #c53030; font-weight: 600; }
+        .neutral { color: #744210; font-weight: 600; }
+
+        /* ── PERFORMANCE TABLE ── */
+        .table-wrap { padding: 0 32px; }
+        table.perf { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+        table.perf thead tr { background: #2c5364; color: #fff; }
+        table.perf thead th { padding: 8px 10px; text-align: left; font-weight: 600; letter-spacing: 0.3px; }
+        table.perf thead th:not(:first-child) { text-align: right; }
+        table.perf tbody tr:nth-child(odd) { background: #f8fafc; }
+        table.perf tbody tr:nth-child(even) { background: #ffffff; }
+        table.perf tbody td { padding: 7px 10px; color: #4a5568; border-bottom: 1px solid #edf2f7; }
+        table.perf tbody td:not(:first-child) { text-align: right; font-family: "Courier New", monospace; font-size: 12px; }
+        .g { color: #276749; } .r { color: #c53030; }
+
+        /* ── ARTICLE CARDS ── */
+        .articles { padding: 8px 32px 28px; }
+        .article { margin-bottom: 20px; padding: 16px 18px; background: #fafbfc; border-left: 4px solid #2c5364; border-radius: 6px; }
+        .article h3 { margin: 0 0 8px; font-size: 16px; color: #1a365d; }
+        .article h3 a { color: #1a365d; text-decoration: none; }
+        .article h3 a:hover { color: #2b6cb0; text-decoration: underline; }
+        .meta { font-size: 12px; color: #718096; margin-bottom: 10px; }
+        .summary { font-size: 14px; color: #4a5568; margin-bottom: 10px; }
+        .why { font-size: 13.5px; color: #4a5568; margin-bottom: 8px; }
+        .impact-box { background: #eaf3fb; padding: 8px 12px; border-radius: 5px; font-size: 13px; color: #2c5364; }
+        .impact-box strong { color: #1a365d; }
+
+        /* ── DIVIDER ── */
+        .divider { height: 1px; background: #e2e8f0; margin: 4px 32px 0; }
+
+        /* ── FOOTER ── */
+        .footer { background: #edf2f7; text-align: center; padding: 18px 30px; font-size: 11.5px; color: #718096; border-top: 1px solid #e2e8f0; }
+        .footer a { color: #2b6cb0; text-decoration: none; }
+        .disclaimer { font-size: 10.5px; color: #a0aec0; margin-top: 8px; line-height: 1.5; }
+
+        @media only screen and (max-width: 600px) {
+            .container { border-radius: 0; }
+            .exec-summary, .table-wrap, .articles { padding-left: 16px; padding-right: 16px; }
+            .divider { margin-left: 16px; margin-right: 16px; }
+            table.perf { font-size: 11px; }
+            table.perf thead th, table.perf tbody td { padding: 6px 6px; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>📊 Daily Finance Digest</h1>
+        <div class="subtitle">AI-Curated Market Insights &amp; News</div>
+        <div class="dateline">Wednesday, June 10, 2026</div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="exec-summary">
+        <div class="section-label">Executive Summary</div>
+        <div class="exec-summary-box">
+            <p>Today's digest covers <strong>15 stories</strong> across markets, earnings, and macro developments. Key themes: Victoria's Secret shares spike 40% after big earnings...; CrowdStrike narrowly beats estimates on AI tailwinds,...; Foot Locker returns to growth but weighs on Dick's....</p>
+        </div>
+
+        <!-- MARKET PULSE BULLETS -->
+    </div>
+
+    <!-- GLOBAL MARKETS TABLE -->
+
+    <!-- SECTOR PERFORMANCE TABLE -->
+
+    <!-- NEWS ARTICLES -->
+    <div class="divider" style="margin-top:28px;"></div>
+    <div class="articles">
+        <div class="section-label" style="margin-top:20px;">Today's Top Stories</div>
+
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/02/victorias-secret-vsxy-earnings-q1-2026.html" target="_blank" rel="noopener">Victoria's Secret shares spike 40% after big earnings beat, raised sales outlook</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 02, 2026 21:19 UTC</div>
+            <div class="summary">Victoria's Secret reported a significant earnings beat and raised its sales outlook, driven by a successful turnaround under CEO Hillary Super. The company is attracting young shoppers across all income levels. This turnaround has led to a substantial increase in the company's shares.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings beat and raised sales outlook are crucial for investors as they indicate a successful turnaround of the company, potentially leading to increased investor confidence and long-term growth.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Retail/Apparel | Strong earnings report and improved sales outlook are likely to boost investor sentiment and drive up stock prices in the short term.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/03/crowdstrike-crwd-q1-2027-earnings.html" target="_blank" rel="noopener">CrowdStrike narrowly beats estimates on AI tailwinds, but stock falls 10%</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 03, 2026 21:34 UTC</div>
+            <div class="summary">CrowdStrike reported earnings that narrowly beat estimates, driven by increasing demand for cybersecurity solutions amidst the growth of artificial intelligence. Despite this, the company's stock fell 10%. The cybersecurity sector has seen significant growth this year, with CrowdStrike's shares rallying nearly 60%.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings report is significant for investors and policymakers as it reflects the ongoing importance of cybersecurity in the face of advancing technology. The demand for such solutions indicates a growing need for protection against potential threats.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bearish | Cybersecurity Stocks | The stock's decline despite beating estimates may indicate investor concerns over future growth prospects or valuation.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/05/27/dicks-sporting-goods-dks-earnings-q1-2026.html" target="_blank" rel="noopener">Foot Locker returns to growth but weighs on Dick's Sporting Goods as earnings miss</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 May 27, 2026 13:01 UTC</div>
+            <div class="summary">Foot Locker has returned to growth, but its parent company Dick's Sporting Goods reported an earnings miss due to high costs associated with the turnaround. The acquisition has led to increased sales for Dick's Sporting Goods. However, profitability has been negatively impacted.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings miss and high costs of the Foot Locker turnaround are significant for investors and policymakers as they indicate potential challenges in the retail sector, particularly for companies undergoing major acquisitions and restructuring.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bearish | Retail | High costs and earnings miss may lead to decreased investor confidence in Dick's Sporting Goods and similar retail companies undergoing significant restructuring.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/02/ulta-beauty-ulta-q1-earnings-2026.html" target="_blank" rel="noopener">Ulta shares pop as beauty retailer beats Wall Street expectations and hikes earnings outlook</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 02, 2026 21:31 UTC</div>
+            <div class="summary">Ulta Beauty reported fiscal first-quarter earnings that exceeded Wall Street expectations, driven by strong sales. The company also raised its earnings outlook. CEO Kecia Steelman attributed the success to the company's effective strategy.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The positive earnings report and increased outlook signify a strong performance by Ulta Beauty, which may boost investor confidence in the retail sector. This could also indicate resilience in consumer spending on beauty products.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Retail/Consumer Goods | Strong earnings and increased outlook may lead to increased investor optimism, driving up stock prices in the sector.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/05/mythos-cybersecurity-earnings-palo-alto-crowdstrike.html" target="_blank" rel="noopener">Mythos rejuvenated the cybersecurity sector. Earnings put the recent rally to the test</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 05, 2026 20:25 UTC</div>
+            <div class="summary">Mythos recently boosted the cybersecurity sector, but its earnings report did not meet investor expectations of an AI-driven payoff. The company's earnings were upbeat, yet not sufficient to sustain the rally. This outcome puts the sector's recent gains to the test.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The outcome of Mythos' earnings report is significant for investors and the broader economy as it reflects the current market sentiment towards cybersecurity and AI-driven technologies. It also has implications for policymakers considering investments in these sectors.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bearish | Cybersecurity | The failure of Mythos' earnings to meet AI-driven payoff expectations may lead to a short-term decline in the sector's stocks.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/02/hpe-stock-earnings-ai-cloud-servers.html" target="_blank" rel="noopener">HPE surges 19% after Monday's blowout earnings, closing its best day ever</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 02, 2026 20:13 UTC</div>
+            <div class="summary">HPE's stock surged 19% after reporting strong earnings, marking its best day ever. CEO Antonio Neri cited the company's unique position to capture AI-driven disruption. The earnings report exceeded expectations, driving the stock's significant gain.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings report and CEO's comments indicate HPE's potential to capitalize on the growing AI trend, which could lead to sustained growth and increased investor confidence.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Tech Sector | Strong earnings and positive AI-driven outlook</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/05/27/salesforce-crm-q1-earnings-report-2027.html" target="_blank" rel="noopener">Salesforce beats on earnings and revenue but full-year guidance comes in light</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 May 27, 2026 22:22 UTC</div>
+            <div class="summary">Salesforce reported earnings and revenue that exceeded expectations, but its full-year guidance was lower than anticipated. The company's performance was overshadowed by concerns about the impact of artificial intelligence on traditional software products. Salesforce's stock has been under pressure due to these concerns.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings report is significant for investors as it provides insight into the company's ability to adapt to the changing technology landscape and maintain its market position. The lighter-than-expected guidance may indicate challenges ahead for the company.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bearish | Cloud Computing | Salesforce's lower full-year guidance may lead to a decline in investor confidence, potentially affecting the stock price and the broader cloud computing sector.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/02/palo-alto-networks-panw-q3-earnings-2026.html" target="_blank" rel="noopener">Palo Alto Networks tops earnings as AI fuels cybersecurity urgency</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 02, 2026 21:53 UTC</div>
+            <div class="summary">Palo Alto Networks reported earnings that exceeded expectations, driven by increased demand for cybersecurity solutions fueled by AI. The company had previously given disappointing guidance in February. The earnings beat comes as a positive surprise after lowered expectations.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings beat signifies the growing importance of cybersecurity in the tech industry, particularly with the rising use of AI. This has direct implications for investors and policymakers, as it underscores the need for robust cybersecurity measures.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Cybersecurity Stocks | The positive earnings surprise is likely to boost investor confidence in the cybersecurity sector, driven by the increasing urgency for AI-powered security solutions.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/05/29/dell-stock-earnings-ai-servers.html" target="_blank" rel="noopener">Dell stock skyrockets 32% for its best day ever as AI server revenue soars</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 May 29, 2026 20:10 UTC</div>
+            <div class="summary">Dell's stock price surged 32% following the company's report of its fastest revenue growth since 2018, driven by a 757% increase in AI server revenue. This marks the company's best day ever. The significant growth is attributed to the soaring demand for AI servers.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The substantial growth in AI server revenue indicates a strong demand for AI technologies, which could have broader implications for the tech industry and investors. This trend may influence investment decisions and policy-making in the technology sector.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Tech Sector | Strong earnings report and soaring AI server revenue may lead to increased investor confidence in tech companies, particularly those involved in AI development and infrastructure.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/04/lululemon-lulu-earnings-q1-2026.html" target="_blank" rel="noopener">Lululemon cuts annual outlook, citing 'negative' media commentary and disappointing product launches</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 04, 2026 23:09 UTC</div>
+            <div class="summary">Lululemon has cut its annual outlook due to negative media commentary and disappointing product launches. The company expects its situation to worsen before improving. This revision reflects weaker-than-expected performance.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The downward revision in Lululemon's annual outlook has significant implications for investors, as it may impact the company's stock price and investor confidence. It also affects the broader retail sector, particularly athletic apparel.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bearish | Retail/Athletic Apparel | Disappointing product launches and negative media commentary are likely to lead to a short-term decline in Lululemon's stock price and potentially impact the broader retail sector.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/05/28/american-eagle-aeo-earnings-q1-2026.html" target="_blank" rel="noopener">American Eagle's Aerie is booming, but its namesake brand is lagging despite Sydney Sweeney ads</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 May 28, 2026 22:06 UTC</div>
+            <div class="summary">American Eagle reported better-than-expected earnings, but its namesake brand's sales fell short of estimates despite a recent advertising campaign featuring Sydney Sweeney. In contrast, the company's Aerie brand performed well. The mixed results reflect challenges in the retail sector.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The performance of American Eagle's brands has significant implications for investors and policymakers, as it reflects broader trends in consumer spending and retail sector health.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Neutral | Retail | The mixed earnings report may lead to a neutral market reaction, as the strong performance of Aerie offsets the weakness of the namesake brand.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/05/22/lenovo-shares-jump-15percent-on-record-earnings-as-ai-revenue-nearly-doubles.html" target="_blank" rel="noopener">Lenovo shares jump nearly 20% on record earnings as AI revenue nearly doubles</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 May 22, 2026 07:51 UTC</div>
+            <div class="summary">Lenovo's shares rose nearly 20% after the company reported record earnings, driven by a significant increase in AI revenue. The electronics giant's AI business nearly doubled, contributing to strong revenue growth. This surge occurred after the company posted its quarterly earnings.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The significant growth in Lenovo's AI business has direct implications for investors and the broader tech industry, as it indicates a successful diversification into emerging technologies and potential for sustained growth.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Tech Sector | Strong earnings and rapid AI revenue growth may boost investor confidence in the company and the sector as a whole.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/05/28/dell-q1-earnings-report-2027.html" target="_blank" rel="noopener">Dell shares jump 39% after server maker reports fastest sales growth since return to public market in 2018</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 May 29, 2026 23:06 UTC</div>
+            <div class="summary">Dell reported its fastest sales growth since 2018, driven by high demand for its servers. The company's shares jumped 39% following the announcement. This growth is attributed to Dell's transition into a high-growth AI company.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The significant sales growth indicates Dell's successful transformation into an AI-focused company, making it an attractive investment opportunity. This shift also highlights the growing demand for AI-related technologies and infrastructure.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Tech Sector | Strong earnings report and successful transition to AI-focused company drive investor confidence and potential sector-wide growth</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/06/01/hpe-stock-earnings-q2.html" target="_blank" rel="noopener">HPE skyrockets 30% on biggest earnings beat since 2018</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 Jun 01, 2026 21:30 UTC</div>
+            <div class="summary">HPE's Q2 earnings report exceeded expectations, driven by a strong performance in its Cloud & AI segment, particularly in server revenue. The company's earnings beat is its largest since 2018. HPE's stock price surged 30% following the announcement.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings beat is significant for investors as it demonstrates HPE's ability to capitalize on growing demand for cloud and AI solutions, potentially indicating a strong growth trajectory for the company.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Tech Sector | Strong earnings report and soaring server revenue in the Cloud & AI segment are likely to boost investor confidence in HPE and the broader tech sector.</div>
+        </div>
+        <div class="article">
+            <h3><a href="https://www.cnbc.com/2026/05/27/abercrombie-fitch-anf-earnings-q1-2026.html" target="_blank" rel="noopener">Abercrombie shares jump 12% on earnings beat even as Iran conflict hits sales</a></h3>
+            <div class="meta">📍 CNBC Markets &bull; 🕒 May 27, 2026 18:05 UTC</div>
+            <div class="summary">Abercrombie & Fitch reported an earnings beat despite a 10% decline in sales in Europe, Middle East, and Africa due to the Iran conflict. The company's shares jumped 12% following the earnings release. The conflict negatively impacted sales, but overall earnings exceeded expectations.</div>
+            <div class="why"><strong>💡 Why it matters:</strong> The earnings report is significant for investors as it demonstrates the company's resilience in the face of geopolitical uncertainty. The results may also inform policymakers about the broader economic impact of the Iran conflict on international businesses.</div>
+            <div class="impact-box">📈 <strong>Market Impact:</strong> Bullish | Retail | Strong earnings despite regional sales decline suggest company's overall health and ability to navigate challenges</div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>Generated on <strong>2026-06-10 05:26:51 UTC</strong> using AI &amp; Python Pipeline</p>
+        <p><a href="#">Unsubscribe</a> &nbsp;|&nbsp; <a href="#">View Archive</a></p>
+        <p class="disclaimer">This material is for <strong>informational and educational purposes only</strong> and does not constitute investment, financial, legal, or tax advice. Past performance is not indicative of future results. Consult a registered investment advisor before making any investment decisions.</p>
+    </div>
+
+</div>
+</div>
+</body>
+</html>

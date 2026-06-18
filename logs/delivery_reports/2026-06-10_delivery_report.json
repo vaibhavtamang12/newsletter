@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "sent_at": "2026-06-10T05:27:01.654368+00:00",
+    "newsletter_date": "2026-06-10",
+    "smtp_server": "smtp.gmail.com",
+    "pipeline_version": "v1.0.0"
+  },
+  "stats": {
+    "total": 2,
+    "sent": 2,
+    "failed": 0
+  },
+  "delivery_log": [
+    {
+      "email": "deadlyhacker12@gmail.com",
+      "status": "success",
+      "subject": "[Daily] Finance Market Digest - 2026-06-10"
+    },
+    {
+      "email": "your_test_email@gmail.com",
+      "status": "success",
+      "subject": "[Daily] Finance Market Digest - 2026-06-10"
+    }
+  ]
+}
