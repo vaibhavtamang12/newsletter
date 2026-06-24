@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weekly Market Brief — {{ date }}</title>
+  <title>Weekly Market Brief — Thursday, June 25, 2026</title>
   <style>
     /* ─── RESET & BASE ─── */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -384,40 +384,28 @@
       </div>
       <div class="hero-tag">Weekly Market Brief</div>
       <div class="hero-title">
-        {% if hero_title %}{{ hero_title }}{% else %}{{ newsletter_title }}{% endif %}
-      </div>
-      <div class="hero-meta">Report Date: <span>{{ date }}</span></div>
+Global De-Risking Event, Healthcare Leadership, Low Vol High Div Factor Dynamics      </div>
+      <div class="hero-meta">Report Date: <span>Thursday, June 25, 2026</span></div>
     </div>
 
     <!-- Signal strip: quick top-level numbers -->
     <div class="signal-strip">
       <div class="signal-item">
         <span class="signal-label">Market Posture</span>
-        {% set posture_lower = signal_posture | lower %}
-        {% if "risk-on" in posture_lower or "rally" in posture_lower %}
-          <span class="signal-value pos">{{ signal_posture }}</span>
-        {% elif "risk-off" in posture_lower or "de-risk" in posture_lower or "defensive" in posture_lower %}
-          <span class="signal-value neg">{{ signal_posture }}</span>
-        {% else %}
-          <span class="signal-value neutral">{{ signal_posture }}</span>
-        {% endif %}
+          <span class="signal-value neg">De-Risking</span>
       </div>
       <div class="signal-item">
         <span class="signal-label">S&amp;P 500 WTD</span>
-        <span class="signal-value {{ sp500_wtd | perf_class }}">{{ sp500_wtd }}</span>
+        <span class="signal-value neg">-2.02%</span>
       </div>
-      {% if leading_factor_name %}
       <div class="signal-item">
         <span class="signal-label">Leading Factor</span>
-        <span class="signal-value pos">{{ leading_factor_name }} {{ leading_factor_value }}</span>
+        <span class="signal-value pos">Low Vol High Div +1.87%</span>
       </div>
-      {% endif %}
-      {% if top_sector_name %}
       <div class="signal-item">
         <span class="signal-label">Top Sector</span>
-        <span class="signal-value pos">{{ top_sector_name }} {{ top_sector_value }}</span>
+        <span class="signal-value pos">Healthcare +3.23%</span>
       </div>
-      {% endif %}
     </div>
   </div>
 
@@ -428,41 +416,36 @@
   <!-- ═══════════════════════════════════════
        EXECUTIVE SUMMARY
   ════════════════════════════════════════ -->
-  {% if executive_summary or key_themes %}
   <div class="section">
     <div class="eyebrow">Executive Summary</div>
     <div class="exec-box">
-      {% if executive_summary %}
-      <p>{{ executive_summary }}</p>
-      {% endif %}
-      {% if key_themes %}
+      <p>The market environment this week was characterized by a De-Risking posture, with the S&P 500 declining 2.02% and the NASDAQ 100 falling 4.36%. The Dow Jones was a notable exception, rising 0.59%. Healthcare and defensive sectors such as Real Estate, Consumer Staples, and Utilities outperformed, while Info Tech lagged.
+
+A defensive rotation is evident, with Low Vol High Div factors leading and Growth and Momentum factors trailing. This signals a near-term shift towards more cautious investing, with investors seeking quality and stability over growth and speculation.</p>
       <div class="key-drivers">
         <div class="kd-label">Key Themes This Week</div>
-        {% for theme in key_themes %}
-        <span class="driver-pill">{{ theme }}</span>
-        {% endfor %}
+        <span class="driver-pill">Flight to Quality</span>
+        <span class="driver-pill">Defensive Rotation</span>
+        <span class="driver-pill">Healthcare Outperformance</span>
+        <span class="driver-pill">Info Tech Weakness</span>
+        <span class="driver-pill">Low Vol High Div Factor Leadership</span>
       </div>
-      {% endif %}
     </div>
   </div>
-  {% endif %}
 
 
   <!-- ═══════════════════════════════════════
        GLOBAL MARKET PULSE
   ════════════════════════════════════════ -->
-  {% if global_markets %}
   <div class="section">
     <div class="eyebrow">Global Market Pulse</div>
     <div class="section-title">International Index Performance</div>
 
-    {% if global_market_insights %}
     <ul class="brief-list" style="margin-bottom:22px;">
-      {% for insight in global_market_insights %}
-      <li>{{ insight }}</li>
-      {% endfor %}
+      <li>Dow Jones (US) outperformed global peers with a WTD return of +0.59%.</li>
+      <li>MSCI EM (Emerging) saw the steepest weekly decline at -5.52%.</li>
+      <li>Significant regional divergence this week: a 6.1pp spread between the best and worst performers.</li>
     </ul>
-    {% endif %}
 
     <table class="perf-table">
       <thead>
@@ -477,46 +460,147 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in global_markets %}
         <tr>
-          <td>{{ row.name }}</td>
-          <td class="{{ row.wtd | perf_class }}">{{ row.wtd }}</td>
-          <td class="{{ row.mtd | perf_class }}">{{ row.mtd }}</td>
-          <td class="{{ row.qtd | perf_class }}">{{ row.qtd }}</td>
-          <td class="{{ row.ytd | perf_class }}">{{ row.ytd }}</td>
-          <td class="{{ row.y2025 | perf_class }}">{{ row.y2025 }}</td>
-          <td class="{{ row.y2024 | perf_class }}">{{ row.y2024 }}</td>
+          <td>S&P 500 (US)</td>
+          <td class="neg">-2.02%</td>
+          <td class="neg">-3.05%</td>
+          <td class="pos">+12.57%</td>
+          <td class="pos">+6.56%</td>
+          <td class="pos">+16.75%</td>
+          <td class="pos">+23.84%</td>
         </tr>
-        {% endfor %}
+        <tr>
+          <td>NASDAQ 100 (US)</td>
+          <td class="neg">-4.36%</td>
+          <td class="neg">-4.13%</td>
+          <td class="pos">+22.50%</td>
+          <td class="pos">+14.21%</td>
+          <td class="pos">+20.12%</td>
+          <td class="pos">+25.98%</td>
+        </tr>
+        <tr>
+          <td>Dow Jones (US)</td>
+          <td class="pos">+0.59%</td>
+          <td class="pos">+1.64%</td>
+          <td class="pos">+11.93%</td>
+          <td class="pos">+7.24%</td>
+          <td class="pos">+13.61%</td>
+          <td class="pos">+12.96%</td>
+        </tr>
+        <tr>
+          <td>S&P/TSX Composite (CAD)</td>
+          <td class="neg">-1.06%</td>
+          <td class="neg">-0.49%</td>
+          <td class="pos">+5.58%</td>
+          <td class="pos">+8.57%</td>
+          <td class="pos">+29.43%</td>
+          <td class="pos">+17.47%</td>
+        </tr>
+        <tr>
+          <td>FTSE 100 (UK)</td>
+          <td class="pos">+0.23%</td>
+          <td class="pos">+1.19%</td>
+          <td class="pos">+0.93%</td>
+          <td class="pos">+5.34%</td>
+          <td class="pos">+21.51%</td>
+          <td class="pos">+5.69%</td>
+        </tr>
+        <tr>
+          <td>CAC 40 (France)</td>
+          <td class="neg">-0.17%</td>
+          <td class="pos">+2.93%</td>
+          <td class="pos">+5.06%</td>
+          <td class="pos">+2.90%</td>
+          <td class="pos">+10.42%</td>
+          <td class="neg">-2.15%</td>
+        </tr>
+        <tr>
+          <td>DAX 40 (Germany)</td>
+          <td class="neg">-1.59%</td>
+          <td class="neg">-1.05%</td>
+          <td class="pos">+6.19%</td>
+          <td class="pos">+1.02%</td>
+          <td class="pos">+23.01%</td>
+          <td class="pos">+18.85%</td>
+        </tr>
+        <tr>
+          <td>STOXX Europe 600 (EUR)</td>
+          <td class="neg">-0.64%</td>
+          <td class="pos">+2.24%</td>
+          <td class="pos">+6.27%</td>
+          <td class="pos">+7.15%</td>
+          <td class="pos">+17.42%</td>
+          <td class="pos">+5.39%</td>
+        </tr>
+        <tr>
+          <td>Nikkei 225 (Japan)</td>
+          <td class="neg">-3.55%</td>
+          <td class="pos">+4.26%</td>
+          <td class="pos">+29.86%</td>
+          <td class="pos">+38.64%</td>
+          <td class="pos">+26.18%</td>
+          <td class="pos">+19.22%</td>
+        </tr>
+        <tr>
+          <td>Hang Seng (HK)</td>
+          <td class="neg">-1.82%</td>
+          <td class="neg">-8.12%</td>
+          <td class="neg">-7.74%</td>
+          <td class="neg">-8.95%</td>
+          <td class="pos">+27.77%</td>
+          <td class="pos">+17.67%</td>
+        </tr>
+        <tr>
+          <td>MSCI World (Developed)</td>
+          <td class="neg">-1.94%</td>
+          <td class="neg">-2.35%</td>
+          <td class="pos">+11.16%</td>
+          <td class="pos">+7.01%</td>
+          <td class="pos">+21.69%</td>
+          <td class="pos">+19.13%</td>
+        </tr>
+        <tr>
+          <td>MSCI ACWI</td>
+          <td class="neg">-2.39%</td>
+          <td class="neg">-2.25%</td>
+          <td class="pos">+11.99%</td>
+          <td class="pos">+8.82%</td>
+          <td class="pos">+22.87%</td>
+          <td class="pos">+17.77%</td>
+        </tr>
+        <tr>
+          <td>MSCI EM (Emerging)</td>
+          <td class="neg">-5.52%</td>
+          <td class="neg">-2.00%</td>
+          <td class="pos">+18.38%</td>
+          <td class="pos">+22.50%</td>
+          <td class="pos">+33.95%</td>
+          <td class="pos">+6.85%</td>
+        </tr>
       </tbody>
     </table>
   </div>
-  {% endif %}
 
 
   <!-- ═══════════════════════════════════════
        US EQUITY STYLE & FACTOR DYNAMICS
   ════════════════════════════════════════ -->
-  {% if style_factors %}
   <div class="section">
     <div class="eyebrow">US Equity Style &amp; Factor Dynamics</div>
     <div class="section-title">Style Factor Performance Update</div>
 
-    {% set sorted_factors = style_factors | sort(attribute='wtd_sort', reverse=True) %}
-    {% if sorted_factors %}
     <div class="insight-grid" style="margin-bottom:22px;">
       <div class="insight-card green">
         <div class="ic-label">Leading Factor</div>
-        <div class="ic-value">{{ sorted_factors[0].name }} {{ sorted_factors[0].wtd }}</div>
+        <div class="ic-value">Low Vol High Div +1.87%</div>
         <div class="ic-sub">Best performing style this week</div>
       </div>
       <div class="insight-card red">
         <div class="ic-label">Lagging Factor</div>
-        <div class="ic-value">{{ sorted_factors[-1].name }} {{ sorted_factors[-1].wtd }}</div>
+        <div class="ic-value">Momentum -3.98%</div>
         <div class="ic-sub">Weakest performing style this week</div>
       </div>
     </div>
-    {% endif %}
 
     <table class="perf-table">
       <thead>
@@ -531,27 +615,95 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in style_factors %}
         <tr>
-          <td>{{ row.name }}</td>
-          <td class="{{ row.wtd | perf_class }}">{{ row.wtd }}</td>
-          <td class="{{ row.mtd | perf_class }}">{{ row.mtd }}</td>
-          <td class="{{ row.qtd | perf_class }}">{{ row.qtd }}</td>
-          <td class="{{ row.ytd | perf_class }}">{{ row.ytd }}</td>
-          <td class="{{ row.y2025 | perf_class }}">{{ row.y2025 }}</td>
-          <td class="{{ row.y2024 | perf_class }}">{{ row.y2024 }}</td>
+          <td>Low Vol High Div</td>
+          <td class="pos">+1.87%</td>
+          <td class="pos">+2.49%</td>
+          <td class="pos">+3.44%</td>
+          <td class="pos">+7.61%</td>
+          <td class="pos">+4.47%</td>
+          <td class="pos">+17.56%</td>
         </tr>
-        {% endfor %}
+        <tr>
+          <td>Pure Value</td>
+          <td class="pos">+1.20%</td>
+          <td class="pos">+0.82%</td>
+          <td class="pos">+6.36%</td>
+          <td class="pos">+10.56%</td>
+          <td class="pos">+19.21%</td>
+          <td class="pos">+11.65%</td>
+        </tr>
+        <tr>
+          <td>Low Volatility</td>
+          <td class="pos">+0.68%</td>
+          <td class="neg">-1.47%</td>
+          <td class="pos">+2.63%</td>
+          <td class="pos">+0.66%</td>
+          <td class="pos">+8.64%</td>
+          <td class="pos">+15.65%</td>
+        </tr>
+        <tr>
+          <td>Equal Weight</td>
+          <td class="pos">+0.57%</td>
+          <td class="pos">+1.12%</td>
+          <td class="pos">+10.02%</td>
+          <td class="pos">+9.76%</td>
+          <td class="pos">+12.38%</td>
+          <td class="pos">+12.59%</td>
+        </tr>
+        <tr>
+          <td>Value</td>
+          <td class="pos">+0.05%</td>
+          <td class="neg">-0.24%</td>
+          <td class="pos">+7.69%</td>
+          <td class="pos">+6.87%</td>
+          <td class="pos">+13.96%</td>
+          <td class="pos">+11.89%</td>
+        </tr>
+        <tr>
+          <td>Quality</td>
+          <td class="neg">-1.36%</td>
+          <td class="neg">-1.00%</td>
+          <td class="pos">+11.22%</td>
+          <td class="pos">+6.84%</td>
+          <td class="pos">+13.17%</td>
+          <td class="pos">+22.63%</td>
+        </tr>
+        <tr>
+          <td>High Beta</td>
+          <td class="neg">-3.14%</td>
+          <td class="pos">+0.08%</td>
+          <td class="pos">+29.51%</td>
+          <td class="pos">+27.26%</td>
+          <td class="pos">+33.73%</td>
+          <td class="pos">+8.96%</td>
+        </tr>
+        <tr>
+          <td>Growth</td>
+          <td class="neg">-3.62%</td>
+          <td class="neg">-5.18%</td>
+          <td class="pos">+17.66%</td>
+          <td class="pos">+7.28%</td>
+          <td class="pos">+21.77%</td>
+          <td class="pos">+37.01%</td>
+        </tr>
+        <tr>
+          <td>Momentum</td>
+          <td class="neg">-3.98%</td>
+          <td class="pos">+3.03%</td>
+          <td class="pos">+35.58%</td>
+          <td class="pos">+28.83%</td>
+          <td class="pos">+22.78%</td>
+          <td class="pos">+33.51%</td>
+        </tr>
       </tbody>
     </table>
   </div>
-  {% endif %}
 
 
   <!-- ═══════════════════════════════════════
        S&P 500 SECTOR PERFORMANCE
   ════════════════════════════════════════ -->
-  {% if sector_performance %}
   <div class="section">
     <div class="eyebrow">S&amp;P 500 Sector &amp; Industry Performance</div>
     <div class="section-title">Sector / Market Cap Analysis</div>
@@ -569,21 +721,108 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in sector_performance %}
         <tr>
-          <td>{{ row.name }}</td>
-          <td class="{{ row.wtd | perf_class }}">{{ row.wtd }}</td>
-          <td class="{{ row.mtd | perf_class }}">{{ row.mtd }}</td>
-          <td class="{{ row.qtd | perf_class }}">{{ row.qtd }}</td>
-          <td class="{{ row.ytd | perf_class }}">{{ row.ytd }}</td>
-          <td class="{{ row.y2025 | perf_class }}">{{ row.y2025 }}</td>
-          <td class="{{ row.y2024 | perf_class }}">{{ row.y2024 }}</td>
+          <td>Healthcare</td>
+          <td class="pos">+3.23%</td>
+          <td class="pos">+3.18%</td>
+          <td class="pos">+5.20%</td>
+          <td class="neg">-0.53%</td>
+          <td class="pos">+15.43%</td>
+          <td class="pos">+2.23%</td>
         </tr>
-        {% endfor %}
+        <tr>
+          <td>Real Estate</td>
+          <td class="pos">+2.59%</td>
+          <td class="pos">+2.29%</td>
+          <td class="pos">+10.20%</td>
+          <td class="pos">+11.24%</td>
+          <td class="pos">+4.39%</td>
+          <td class="pos">+4.27%</td>
+        </tr>
+        <tr>
+          <td>Consumer Staples</td>
+          <td class="pos">+2.24%</td>
+          <td class="pos">+2.72%</td>
+          <td class="pos">+3.88%</td>
+          <td class="pos">+9.59%</td>
+          <td class="pos">+2.44%</td>
+          <td class="pos">+11.86%</td>
+        </tr>
+        <tr>
+          <td>Utilities</td>
+          <td class="pos">+2.18%</td>
+          <td class="pos">+2.96%</td>
+          <td class="neg">-0.34%</td>
+          <td class="pos">+7.20%</td>
+          <td class="pos">+16.65%</td>
+          <td class="pos">+23.43%</td>
+        </tr>
+        <tr>
+          <td>Financials</td>
+          <td class="pos">+0.80%</td>
+          <td class="pos">+4.69%</td>
+          <td class="pos">+9.38%</td>
+          <td class="neg">-1.64%</td>
+          <td class="pos">+15.88%</td>
+          <td class="pos">+30.42%</td>
+        </tr>
+        <tr>
+          <td>Energy</td>
+          <td class="pos">+0.04%</td>
+          <td class="neg">-4.44%</td>
+          <td class="neg">-12.19%</td>
+          <td class="pos">+20.42%</td>
+          <td class="pos">+9.90%</td>
+          <td class="pos">+4.19%</td>
+        </tr>
+        <tr>
+          <td>Industrials</td>
+          <td class="neg">-0.28%</td>
+          <td class="pos">+4.20%</td>
+          <td class="pos">+11.55%</td>
+          <td class="pos">+15.66%</td>
+          <td class="pos">+20.20%</td>
+          <td class="pos">+17.45%</td>
+        </tr>
+        <tr>
+          <td>Materials</td>
+          <td class="neg">-0.87%</td>
+          <td class="pos">+0.41%</td>
+          <td class="pos">+2.78%</td>
+          <td class="pos">+12.81%</td>
+          <td class="pos">+11.31%</td>
+          <td class="neg">-0.26%</td>
+        </tr>
+        <tr>
+          <td>Consumer Discretionary</td>
+          <td class="neg">-1.26%</td>
+          <td class="neg">-4.29%</td>
+          <td class="pos">+6.15%</td>
+          <td class="neg">-3.69%</td>
+          <td class="pos">+7.41%</td>
+          <td class="pos">+27.47%</td>
+        </tr>
+        <tr>
+          <td>Communication Services</td>
+          <td class="neg">-2.27%</td>
+          <td class="neg">-7.54%</td>
+          <td class="neg">-3.51%</td>
+          <td class="neg">-9.28%</td>
+          <td class="pos">+23.27%</td>
+          <td class="pos">+35.15%</td>
+        </tr>
+        <tr>
+          <td>Info Tech</td>
+          <td class="neg">-4.88%</td>
+          <td class="neg">-4.67%</td>
+          <td class="pos">+37.02%</td>
+          <td class="pos">+25.39%</td>
+          <td class="pos">+24.81%</td>
+          <td class="pos">+22.65%</td>
+        </tr>
       </tbody>
     </table>
   </div>
-  {% endif %}
 
 
   <!-- ═══════════════════════════════════════
@@ -599,12 +838,12 @@
        FOOTER
   ════════════════════════════════════════ -->
   <div class="footer">
-    <p>Northern Invest &nbsp;·&nbsp; Weekly Market Brief &nbsp;·&nbsp; {{ date }}</p>
+    <p>Northern Invest &nbsp;·&nbsp; Weekly Market Brief &nbsp;·&nbsp; Thursday, June 25, 2026</p>
     <p style="margin-top:6px;">
       <a href="#">Unsubscribe</a> &nbsp;|&nbsp; <a href="#">View Archive</a> &nbsp;|&nbsp; <a href="#">Manage Preferences</a>
     </p>
     <p style="margin-top:8px; font-size:10px; opacity:0.5;">Independent. Disciplined. Aligned. &nbsp;·&nbsp; Rooted in Canada. Investing for Generations.</p>
-    <p style="margin-top:6px; font-size:10px; opacity:0.4;">Generated {{ generated_at_ist }} ({{ generated_at }})</p>
+    <p style="margin-top:6px; font-size:10px; opacity:0.4;">Generated 2026-06-25 12:59 AM IST (2026-06-24 19:29:39 UTC)</p>
   </div>
 
 </div><!-- /container -->

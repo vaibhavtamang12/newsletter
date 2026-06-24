@@ -31,6 +31,7 @@ Output schema (matches generate_newsletter.py context expectations):
 
 import json
 import logging
+import os
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -41,6 +42,12 @@ try:
 except ImportError:
     print("ERROR: yfinance is not installed. Run: pip install yfinance")
     sys.exit(1)
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # .env loading is optional; env vars may be set by the CI environment
 
 # ============================================================================
 # PATHS
@@ -192,15 +199,19 @@ def fetch_performance(ticker: str, name: str) -> Optional[Dict]:
         p_2024e   = price_on_or_before(y2024_end)
         p_2024s   = price_on_or_before(y2024_start)
 
+        wtd_str = _pct(latest, p_week) if p_week else "N/A"
         return {
             "name":  name,
-            "wtd":   _pct(latest, p_week)    if p_week    else "N/A",
+            "wtd":   wtd_str,
             "mtd":   _pct(latest, p_month)   if p_month   else "N/A",
             "qtd":   _pct(latest, p_quarter) if p_quarter else "N/A",
             "ytd":   _pct(latest, p_ytd)     if p_ytd     else "N/A",
             "y2025": _pct(p_2025e, p_2025s)  if (p_2025e and p_2025s) else "N/A",
             "y2024": _pct(p_2024e, p_2024s)  if (p_2024e and p_2024s) else "N/A",
             "latest_close": round(latest, 2),
+            # Numeric WTD for Jinja `| sort(attribute='wtd_sort')` — avoids
+            # lexicographic string comparison on "+1.23%" values.
+            "wtd_sort": _parse_pct(wtd_str),
         }
     except Exception as e:
         logger.error(f"❌ Failed to fetch {ticker} ({name}): {e}")
@@ -321,6 +332,82 @@ def build_global_insights(global_rows: List[Dict]) -> List[str]:
     return insights
 
 # ============================================================================
+# EXECUTIVE SUMMARY (Groq)
+# ============================================================================
+
+def generate_executive_summary(
+    posture: str,
+    sp500_wtd: str,
+    global_rows: List[Dict],
+    sector_rows: List[Dict],
+    factor_rows: List[Dict],
+    themes: List[str],
+) -> str:
+    """
+    Generate a 2-paragraph executive summary using Groq, grounded in the
+    live market data fetched this run. Falls back to an empty string if
+    GROQ_API_KEY is not set or the call fails.
+    """
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        logger.info("ℹ️  GROQ_API_KEY not set — skipping executive summary generation.")
+        return ""
+
+    try:
+        from groq import Groq
+    except ImportError:
+        logger.warning("⚠️  groq package not installed — skipping executive summary.")
+        return ""
+
+    def _fmt_rows(rows: List[Dict], cols: List[str] = ("name", "wtd", "mtd", "ytd")) -> str:
+        lines = []
+        for r in rows:
+            parts = [str(r.get(c, "N/A")) for c in cols]
+            lines.append("  " + " | ".join(parts))
+        return "\n".join(lines) if lines else "  (no data)"
+
+    prompt = f"""You are a senior portfolio strategist writing the opening Executive Summary for a weekly finance newsletter sent to institutional and retail investors.
+
+Here is this week's live market data:
+
+SIGNAL POSTURE: {posture}
+S&P 500 WTD: {sp500_wtd}
+KEY THEMES: {", ".join(themes) if themes else "N/A"}
+
+GLOBAL MARKETS (name | WTD | MTD | YTD):
+{_fmt_rows(global_rows)}
+
+S&P 500 SECTORS (name | WTD | MTD | YTD) — sorted best to worst:
+{_fmt_rows(sector_rows)}
+
+STYLE FACTORS (name | WTD | MTD | YTD) — sorted best to worst:
+{_fmt_rows(factor_rows)}
+
+Write a 2-paragraph Executive Summary grounded entirely in the data above. Do not invent figures not present in the data.
+
+Paragraph 1: Characterise the week's overall market environment — what drove the posture ({posture}), which regions/sectors led or lagged, and the magnitude of moves.
+Paragraph 2: Identify the key rotation or factor dynamic visible in the data (e.g. defensive vs growth, value vs momentum) and what it signals for investors in the near term.
+
+Tone: authoritative, concise, professional. No bullet points. No headers. Plain prose only. Target ~120 words total."""
+
+    try:
+        client = Groq(api_key=api_key)
+        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=300,
+            temperature=0.4,
+        )
+        summary = response.choices[0].message.content.strip()
+        logger.info("✅ Executive summary generated via Groq.")
+        return summary
+    except Exception as e:
+        logger.warning(f"⚠️  Groq executive summary failed: {e}")
+        return ""
+
+
+# ============================================================================
 # MAIN PIPELINE
 # ============================================================================
 
@@ -375,6 +462,11 @@ def run_fetch_pipeline() -> Dict:
     insights= build_global_insights(global_rows)
     hero    = build_hero_title(posture, top_sector_name, leading_factor_name)
 
+    logger.info("🤖 Generating executive summary via Groq...")
+    exec_summary = generate_executive_summary(
+        posture, sp500_wtd, global_rows, sector_rows, factor_rows, themes
+    )
+
     payload = {
         "fetched_at": now_utc.isoformat(),
         # Signal strip
@@ -387,7 +479,7 @@ def run_fetch_pipeline() -> Dict:
         # Hero / narrative
         "hero_title":           hero,
         # Template sections
-        "executive_summary":    "",   # left empty — auto-filled by Groq in summarize step
+        "executive_summary":    exec_summary,
         "key_themes":           themes,
         "global_markets":       global_rows,
         "global_market_insights": insights,

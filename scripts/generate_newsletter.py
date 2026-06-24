@@ -137,9 +137,48 @@ def load_latest_summarized() -> Optional[Tuple[List[Dict], Path]]:
         return None
 
 
+MARKET_DATA_MAX_AGE_HOURS = int(os.getenv("MARKET_DATA_MAX_AGE_HOURS", "20"))
+
+
+def _market_data_is_stale(path: Path) -> bool:
+    """Return True if market_data.json is older than MARKET_DATA_MAX_AGE_HOURS."""
+    try:
+        fetched_at_str = None
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        fetched_at_str = data.get("fetched_at")
+        if not fetched_at_str:
+            return True
+        fetched_at = datetime.fromisoformat(fetched_at_str.replace("Z", "+00:00"))
+        age = datetime.now(timezone.utc) - fetched_at
+        return age.total_seconds() > MARKET_DATA_MAX_AGE_HOURS * 3600
+    except Exception:
+        return True
+
+
+def _refresh_market_data() -> bool:
+    """Run fetch_market_data.py as a subprocess. Returns True on success."""
+    fetch_script = Path(__file__).resolve().parent / "fetch_market_data.py"
+    if not fetch_script.exists():
+        logger.warning("⚠️  fetch_market_data.py not found — cannot auto-refresh.")
+        return False
+    import subprocess
+    logger.info("🔄 Market data is stale — running fetch_market_data.py...")
+    result = subprocess.run(
+        [sys.executable, str(fetch_script)],
+        capture_output=False,
+    )
+    if result.returncode == 0:
+        logger.info("✅ Market data refreshed successfully.")
+        return True
+    else:
+        logger.warning(f"⚠️  fetch_market_data.py exited with code {result.returncode}.")
+        return False
+
+
 def load_market_data() -> Optional[Dict]:
     """
-    Load optional structured market performance data.
+    Load structured market performance data, auto-refreshing if stale.
 
     Expected file: data/market/market_data.json
     Expected schema:
@@ -158,11 +197,17 @@ def load_market_data() -> Optional[Dict]:
       ]
     }
 
-    If the file doesn't exist, returns None and the template simply
-    omits those sections (all market table blocks are wrapped in
-    {% if ... %} guards).
+    If the file doesn't exist or fetch fails, returns None and the template
+    omits those sections (all market table blocks are wrapped in {% if %} guards).
     """
     MARKET_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    market_file = MARKET_DATA_DIR / "market_data.json"
+
+    # Auto-refresh if missing or stale
+    if not market_file.exists() or _market_data_is_stale(market_file):
+        _refresh_market_data()
+
+    # Re-check after potential refresh
     market_files = sorted(MARKET_DATA_DIR.glob("market_data*.json"))
     if not market_files:
         logger.info("ℹ️  No market data file found — skipping market tables.")
@@ -172,7 +217,8 @@ def load_market_data() -> Optional[Dict]:
     try:
         with open(target, "r", encoding="utf-8") as f:
             data = json.load(f)
-        logger.info(f"📈 Loaded market data: {target.name}")
+        fetched_at = data.get("fetched_at", "unknown")
+        logger.info(f"📈 Loaded market data: {target.name} (fetched {fetched_at})")
         return data
     except (json.JSONDecodeError, IOError) as e:
         logger.warning(f"⚠️ Could not load market data: {e}")
