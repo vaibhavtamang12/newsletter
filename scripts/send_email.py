@@ -211,7 +211,13 @@ def run_delivery_pipeline() -> bool:
 
     # Format subject dynamically
     newsletter_date = md_path.parent.name
-    subject = SUBJECT_TEMPLATE.format(date=newsletter_date)
+    # Reformat date from YYYY-MM-DD to "YYYY Month DD" (e.g., "2026 June 26")
+    try:
+        parsed_date = datetime.strptime(newsletter_date, "%Y-%m-%d")
+        formatted_date = parsed_date.strftime("%Y %B %d").replace(" 0", " ")
+    except ValueError:
+        formatted_date = newsletter_date
+    subject = SUBJECT_TEMPLATE.format(date=formatted_date)
     
     delivery_log: List[Dict[str, str]] = []
     stats = {"total": len(subscribers), "sent": 0, "failed": 0}

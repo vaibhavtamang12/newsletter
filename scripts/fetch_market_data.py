@@ -284,14 +284,14 @@ def build_key_themes(posture: str, sector_rows: List[Dict], factor_rows: List[Di
 
 def build_hero_title(posture: str, top_sector: str, leading_factor: str) -> str:
     lines = []
-    if "risk-off" in posture.lower() or "de-risk" in posture.lower():
-        lines.append("Global De-Risking Event")
-    elif "risk-on" in posture.lower():
-        lines.append("Broad Market Rally")
-    elif "defensive" in posture.lower():
-        lines.append("Defensive Rotation in Focus")
-    else:
-        lines.append("Mixed Market Signals")
+    # if "risk-off" in posture.lower() or "de-risk" in posture.lower():
+    #     lines.append("Global De-Risking Event")
+    # elif "risk-on" in posture.lower():
+    #     lines.append("Broad Market Rally")
+    # elif "defensive" in posture.lower():
+    #     lines.append("Defensive Rotation in Focus")
+    # else:
+    #     lines.append("Mixed Market Signals")
 
     if top_sector:
         lines.append(f"{top_sector} Leadership")
@@ -383,10 +383,7 @@ S&P 500 SECTORS (name | WTD | MTD | YTD) — sorted best to worst:
 STYLE FACTORS (name | WTD | MTD | YTD) — sorted best to worst:
 {_fmt_rows(factor_rows)}
 
-Write a 2-paragraph Executive Summary grounded entirely in the data above. Do not invent figures not present in the data.
-
-Paragraph 1: Characterise the week's overall market environment — what drove the posture ({posture}), which regions/sectors led or lagged, and the magnitude of moves.
-Paragraph 2: Identify the key rotation or factor dynamic visible in the data (e.g. defensive vs growth, value vs momentum) and what it signals for investors in the near term.
+Write a 2-paragraph Executive Summary grounded entirely in the data above. Do not invent figures not present in the data. Identify the primary rotation or factor dynamic evident in the data (e.g., defensive vs. growth, value vs. momentum, quality vs. cyclicals), explain what this rotation indicates about investor positioning, and conclude with its implications for the near-term market outlook. Keep the response objective, data-driven, and free of speculation.
 
 Tone: authoritative, concise, professional. No bullet points. No headers. Plain prose only. Target ~120 words total."""
 
